@@ -1,0 +1,50 @@
+{
+  "name": "aurelia-formbuilder",
+  "version": "1.0.0",
+  "description": "learning project for dynamic form configuration",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InquisitorJax/Aurelia-FormBuilder.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/InquisitorJax/Aurelia-FormBuilder/issues"
+  },
+  "homepage": "https://github.com/InquisitorJax/Aurelia-FormBuilder#readme",
+  "devDependencies": {
+    "aurelia-bundler": "^0.4.0",
+    "del": "^2.2.1",
+    "gulp": "^3.9.1",
+    "gulp-changed": "^1.3.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.1.0",
+    "jspm": "^0.16.39",
+    "require-dir": "^0.3.0",
+    "run-sequence": "^1.2.1",
+    "systemjs": "^0.19.31",
+    "typings": "^1.3.1",
+    "vinyl-paths": "^2.1.0"
+  },
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "core-js": "^2.4.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-typescript": "^2.13.6"
+  },
+  "jspm": {
+    "directories": {
+      "doc": "doc",
+      "test": "test"
+    },
+    "dependencies": {
+      "aurelia-bootstrapper": "npm:aurelia-bootstrapper@^1.0.0-rc.1.0.0",
+      "aurelia-framework": "npm:aurelia-framework@^1.0.0-rc.1.0.0"
+    },
+    "devDependencies": {}
+  }
+}

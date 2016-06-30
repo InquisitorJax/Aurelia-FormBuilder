@@ -1,0 +1,305 @@
+These are the basic steps followed to produce the minimum aurelia typescript project
+
+Goals:
+Primary: Basic todoApp with Aurelia / typescript / tests
+Secondary: Code Coverage reporting, end to end integration testing
+Tertiary: Web Component implementation
+
+Steps followed:
+1) Create Folders:
+    start with blank folder, and add folders: build, dist, doc, src, styles, test
+2) Install npm from Terminal:
+    npm init, and just enter on all the options - this will create node_modules folder and a package.json file
+    that lists all the npm packages in the app
+3) Npm installs:
+    Gulp: Task runner for building, transpiling, deploying etc. etc.
+    pre: if you haven't already, install gulp globally: npm install gulp -g
+    npm install gulp --save-dev
+    create the gulpfile.js that points to the gulp tasks in the build/tasks directory
+    add this:
+    require('require-dir')('build/tasks');
+4) Initial Build setup
+    define build/paths.js to setup:
+    /*
+       var appRoot = 'src/';
+       var outputRoot = 'dist/';
+       var styles = 'styles/';
+
+       module.exports = {
+           root: appRoot,
+           sass: appRoot + '**/*.scss',
+           source: appRoot + '**/*.ts',
+           html: appRoot + '**/*.html',
+           output: outputRoot,
+           css:  styles + '**/*.css',
+           sass:  styles + '**/*.scss',
+           doc: './doc',
+           dtsSrc: [
+               './typings/**/*.d.ts',
+               './custom_typings/**/*.d.ts'
+           ]
+       };
+    */
+
+5) Install require-dir to find the gulp tasks
+    npm install require-dir --save-dev
+
+6) Setup Typescript - ES5 compilation:
+    npm install gulp-typescript --save
+    npm install gulp-sourcemaps --save
+    [optional]-> Add build.js file to build/tasks -> add tsc build task (see build.js from aurelia-skeleton-typescript)
+    npm install gulp-changed --save-dev
+    npm install gulp-plumber --save-dev
+    npm install gulp-notify --save-dev
+    add tasks folder to build folder
+    /*
+    var gulp = require('gulp');
+    var changed = require('gulp-changed');
+    var plumber = require('gulp-plumber');
+    var sourcemaps = require('gulp-sourcemaps');
+    var paths = require('../paths');
+    var assign = Object.assign || require('object.assign');
+    var notify = require('gulp-notify');
+    var typescript = require('gulp-typescript');
+
+    var typescriptCompiler = typescriptCompiler || null;
+    gulp.task('build-ts', function() {
+        if(!typescriptCompiler) {
+            typescriptCompiler = typescript.createProject('tsconfig.json', {
+                "typescript": require('typescript')
+            });
+        }
+        return gulp.src(paths.dtsSrc.concat(paths.source))
+            .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
+            .pipe(changed(paths.output, {extension: '.ts'}))
+            .pipe(sourcemaps.init({loadMaps: true}))
+            .pipe(typescript(typescriptCompiler))
+            .pipe(sourcemaps.write('.', {includeContent: false, sourceRoot: '/src'}))
+            .pipe(gulp.dest(paths.output));
+    });
+    */
+    setup type definitions for typescript
+    -> typescript definition manager:
+    npm install typings -g --save-dev
+    npm install typings --save-dev
+    sidenote: ..make sure typings up to date if installed: npm i -g typings
+    typings init (adds the initial typings.json file)
+    use typescript generation settings in webstorm
+        - generate files to dist folder
+        - watch on changed VCS files
+    add tsconfig.json from project
+    /*
+    {
+      "compileOnSave": true,
+      "compilerOptions": {
+        "sourceMap": true,
+        "target": "es5",
+        "module": "commonjs",
+        "moduleResolution": "classic",
+        "declaration": false,
+        "noImplicitAny": false,
+        "noResolve": true,
+        "removeComments": true,
+        "noLib": false,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "outDir": "dist"
+      },
+      "filesGlob": [
+        "./src/**/*.ts",
+        "./typings/index.d.ts",
+        "./custom_typings/**/*.d.ts",
+        "./jspm_packages/**/*.d.ts"
+      ],
+      "exclude": [
+        "node_modules",
+        "jspm_packages"
+      ]
+    }
+    */
+
+    add the aurelia dependencies to typings.json:
+     "aurelia-binding": "github:aurelia/binding",
+        "aurelia-bootstrapper": "github:aurelia/bootstrapper",
+        "aurelia-dependency-injection": "github:aurelia/dependency-injection",
+        "aurelia-event-aggregator": "github:aurelia/event-aggregator",
+        "aurelia-fetch-client": "github:aurelia/fetch-client",
+        "aurelia-framework": "github:aurelia/framework",
+        "aurelia-history": "github:aurelia/history",
+        "aurelia-history-browser": "github:aurelia/history-browser",
+        "aurelia-loader": "github:aurelia/loader",
+        "aurelia-logging": "github:aurelia/logging",
+        "aurelia-logging-console": "github:aurelia/logging-console",
+        "aurelia-metadata": "github:aurelia/metadata",
+        "aurelia-pal": "github:aurelia/pal",
+        "aurelia-pal-browser": "github:aurelia/pal-browser",
+        "aurelia-path": "github:aurelia/path",
+        "aurelia-polyfills": "github:aurelia/polyfills",
+        "aurelia-route-recognizer": "github:aurelia/route-recognizer",
+        "aurelia-router": "github:aurelia/router",
+        "aurelia-task-queue": "github:aurelia/task-queue",
+        "aurelia-templating": "github:aurelia/templating",
+        "aurelia-templating-binding": "github:aurelia/templating-binding",
+        "aurelia-templating-resources": "github:aurelia/templating-resources",
+        "aurelia-templating-router": "github:aurelia/templating-router",
+        "aurelia-validation": "github:aurelia/validation",
+        "aurelia-validatejs": "github:aurelia/validatejs"
+      },
+      "globalDependencies": {
+        "es6-collections": "registry:dt/es6-collections",
+        "es6-promise": "registry:dt/es6-promise",
+        "systemjs": "registry:dt/systemjs"
+      }
+
+7) Setup jspm:
+    global if necessary: npm install jspm -g
+    for project: npm install jspm --save-dev
+    run: jspm init to add the jspm .config file
+    add
+         "*": "dist/*",
+         "github:*": "jspm_packages/github/*",
+         "npm:*": "jspm_packages/npm/*"
+    to paths in config.js
+    remove the baseUrl entry
+
+8) Add Index.html & index.js
+    wire up SystemJS Module loader:
+        add to main page:
+        <script src="jspm_packages/system.js"></script>
+        <script src="config.js"></script>
+        /*
+        index.html
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Aurelia</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+        </head>
+
+        <body aurelia-app="main">
+
+        <div class="splash">
+            <div class="message">Aurelia</div>
+            <i class="fa fa-spinner fa-spin"></i>
+        </div>
+
+        <script src="jspm_packages/system.js"></script>
+        <script src="config.js"></script>
+        <script>
+            System.import('aurelia-bootstrapper');
+        </script>
+        </body>
+        </html>
+
+        index.js:
+        'use strict';
+
+        var app = require('app');
+        var BrowserWindow = require('browser-window');
+        var mainWindow = null;
+
+        require('crash-reporter').start();
+
+        app.on('window-all-closed', function() {
+            if (process.platform !== 'darwin') {
+                app.quit();
+            }
+        });
+
+        app.on('ready', function() {
+            mainWindow = new BrowserWindow({
+                width: 800,
+                height: 600
+            });
+
+            mainWindow.loadUrl('file://' + __dirname + '/index.html');
+            mainWindow.webContents.on('did-finish-load', function() {
+                mainWindow.setTitle(app.getName());
+            });
+            mainWindow.on('closed', function() {
+                mainWindow = null;
+            });
+        });
+
+
+        */
+
+9) Setup Aurelia:
+    jspm install aurelia-framework
+    jspm install aurelia-bootstrapper
+
+10) Install Typings
+[temp]typings: copy typings.json from aurelia typescript project (pasted above)
+    create a custom_typings folder
+    add whatwg-fetch.d.ts file to fill the gap for that dependency
+    run: typings install
+
+[optional]setup sass compilation
+[optional]setup bundling to combine all the tiny javascript files for performance reasons (not nece when http/2 is released)
+
+11) Basic app files in src folder:
+app.html
+<template>
+    <p>${message}</p>
+    <button click.delegate="exclaim()">Exclaim!</button>
+</template>
+app.ts
+export class App {
+    message: string;
+
+    constructor() {
+        this.message = 'Oh hai';
+    }
+
+    exclaim() {
+        this.message += '!!!';
+    }
+}
+main.ts
+import 'bootstrap';
+import {Aurelia} from 'aurelia-framework';
+
+export function configure(aurelia: Aurelia) {
+    aurelia.use
+        .standardConfiguration()
+        .developmentLogging();
+    aurelia.start().then(() => aurelia.setRoot());
+}
+
+12) additional gulp build tasks
+ - bundling
+ npm install aurelia-bundler --save-dev
+ npm install systemjs --save-dev
+ add bundle.js to tasks and bundles.js to build folders
+ - clean
+ npm install del --save-dev
+ npm install vinyl-paths --save-dev
+ add clean.js to tasks folder:
+ /*
+ var gulp = require('gulp');
+ var paths = require('../paths');
+ var del = require('del');
+ var vinylPaths = require('vinyl-paths');
+
+ // deletes all files in the output path
+ gulp.task('clean', ['unbundle'], function() {
+     return gulp.src([paths.output])
+         .pipe(vinylPaths(del));
+ });
+
+ */
+ - build html / css / typescript
+ npm install run-sequence --save-dev
+
+13) run: gulp build to compile files into dist folder
+
+links:
+Npm:
+https://docs.npmjs.com/ - see Getting Started
+Gulp
+https://markgoodyear.com/2014/01/getting-started-with-gulp/
+typescript aurelia setup (notes here updated to reflect tsd replacement with typings install)
+http://www.mikeobrien.net/blog/setting-up-a-typescript-aurelia-app-and-tests-from-scratch/
+
+Things you still want to install:
+ - testing
