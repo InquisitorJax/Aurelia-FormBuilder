@@ -1,8 +1,12 @@
-/**
- * Created by malcolmj on 6/29/2016.
- */
+import {StaffMember, WorkOrderFeedback} from './Models/Models';
+import 'bootstrap';
+import 'bootstrap/css/bootstrap.css!';
+
+
 export class App {
     message: string;
+    staffMember : StaffMember;
+    workOrderFeedback : WorkOrderFeedback;
 
     constructor() {
         this.message = 'Oh hai';
@@ -11,4 +15,6 @@ export class App {
     exclaim() {
         this.message += '!!!';
     }
+    
+    
 }

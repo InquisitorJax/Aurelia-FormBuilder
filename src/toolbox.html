@@ -1,0 +1,16 @@
+<template>
+    <h3>Controls Toolbox</h3>
+    <form role="form" >
+        <select value.bind="selectedMetaModel">
+            <option repeat.for="metaModel of metaModels" model.bind="metaModel">${metaModel.name}</option>
+        </select>
+        <ul class="list-unstyled toolbox au-stagger" ref="toolboxList">
+            <li repeat.for="metaProperty of selectedMetaModel.properties"
+                class="au-animate dragged-element"
+                title="${metaProperty.name}">${metaProperty.name}</li>
+        </ul>
+    </form>
+    <br />
+    <button click.delegate="saveTemplate()" type="button" class="btn btn-primary fa fa-check"> GO!</button>
+    <!--<button click.delegate="testTemplate()" type="button" class="btn btn-warning fa fa-remove"> Test</button>-->
+</template>

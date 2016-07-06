@@ -1,4 +1,11 @@
 <template>
-    <p>${message}</p>
-    <button click.delegate="exclaim()">Exclaim!</button>
+    <div class="page-host">
+        <h1 class="non-printable">Form Builder</h1>
+
+        <div class="row" >
+            <compose class="col-md-3 col-sm-3 non-printable" view-model="toolbox"></compose>
+            <compose class="col-md-6 col-sm-6 printable" view-model="formTemplate"></compose>
+            <compose class="col-md-3 col-sm-3 non-printable" view-model="properties"></compose>
+        </div>
+    </div>
 </template>

@@ -7,8 +7,22 @@ System.config({
     "npm:*": "jspm_packages/npm/*"
   },
   map: {
+    "aurelia-animator-css": "npm:aurelia-animator-css@1.0.0-rc.1.0.0",
     "aurelia-bootstrapper": "npm:aurelia-bootstrapper@1.0.0-rc.1.0.0",
+    "aurelia-event-aggregator": "npm:aurelia-event-aggregator@1.0.0-rc.1.0.0",
     "aurelia-framework": "npm:aurelia-framework@1.0.0-rc.1.0.0",
+    "bootstrap": "github:twbs/bootstrap@3.3.6",
+    "css": "github:systemjs/plugin-css@0.1.23",
+    "font-awesome": "npm:font-awesome@4.6.3",
+    "sortable": "github:RubaXa/Sortable@1.3.0",
+    "github:twbs/bootstrap@3.3.6": {
+      "jquery": "npm:jquery@2.2.4"
+    },
+    "npm:aurelia-animator-css@1.0.0-rc.1.0.0": {
+      "aurelia-metadata": "npm:aurelia-metadata@1.0.0-rc.1.0.0",
+      "aurelia-pal": "npm:aurelia-pal@1.0.0-rc.1.0.0",
+      "aurelia-templating": "npm:aurelia-templating@1.0.0-rc.1.0.0"
+    },
     "npm:aurelia-binding@1.0.0-rc.1.0.2": {
       "aurelia-logging": "npm:aurelia-logging@1.0.0-rc.1.0.0",
       "aurelia-metadata": "npm:aurelia-metadata@1.0.0-rc.1.0.0",
@@ -122,6 +136,9 @@ System.config({
       "aurelia-pal": "npm:aurelia-pal@1.0.0-rc.1.0.0",
       "aurelia-path": "npm:aurelia-path@1.0.0-rc.1.0.0",
       "aurelia-task-queue": "npm:aurelia-task-queue@1.0.0-rc.1.0.0"
+    },
+    "npm:font-awesome@4.6.3": {
+      "css": "github:systemjs/plugin-css@0.1.23"
     }
   }
 });
